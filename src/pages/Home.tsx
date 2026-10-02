@@ -19,6 +19,7 @@ import { ProjectCard } from '../components/ProjectCard';
 import { PersonBook } from '../components/PersonBook';
 import { DemoPeopleNotice, usePeople } from '../content/PeopleProvider';
 import { events, projects } from '../content';
+import { LightsOutEasterEgg } from '../games/lights-out/EasterEgg';
 /* Hovering the second title line makes the copy literal: a plaque wipes across 不断加一 and i
    counts up in hex, easing in until it tops out around i = E and then holds that pace. */
 const FILL_MS = 420,
@@ -86,27 +87,27 @@ function CountingLine({ children }: { children: ReactNode }) {
 function PlusArt() {
   const parallax = useArtParallax();
   return (
-    <div className="hero-art" aria-hidden="true" {...parallax}>
-      <div className="art-orbit orbit-one" />
-      <div className="art-orbit orbit-two" />
-      <div className="art-tile tile-purple">
-        <span>i</span>
-        <span className="tile-dot" />
+    <LightsOutEasterEgg>{press => <div className="hero-art" {...parallax}>
+      <div className="art-orbit orbit-one" aria-hidden="true" />
+      <div className="art-orbit orbit-two" aria-hidden="true" />
+      <button type="button" className="art-tile tile-purple" aria-label="I 图形卡片" onClick={press}>
+        <span aria-hidden="true">i</span>
+        <span className="tile-dot" aria-hidden="true" />
         <CatSignature className="hero-cat-mark" />
-      </div>
-      <div className="art-tile tile-green">+</div>
-      <div className="art-tile tile-peach">+</div>
-      <div className="art-spark">✳</div>
-      <div className="art-code">
+      </button>
+      <button type="button" className="art-tile tile-green" aria-label="第一个加号图形卡片" onClick={press}>+</button>
+      <button type="button" className="art-tile tile-peach" aria-label="第二个加号图形卡片" onClick={press}>+</button>
+      <div className="art-spark" aria-hidden="true">✳</div>
+      <div className="art-code" aria-hidden="true">
         <Code2 size={29} />
       </div>
-      <div className="art-note">
+      <div className="art-note" aria-hidden="true">
         <MoveUpRight size={22} />
       </div>
-      <div className="art-dot dot-one" />
-      <div className="art-dot dot-two" />
-      <div className="art-cross">+</div>
-    </div>
+      <div className="art-dot dot-one" aria-hidden="true" />
+      <div className="art-dot dot-two" aria-hidden="true" />
+      <div className="art-cross" aria-hidden="true">+</div>
+    </div>}</LightsOutEasterEgg>
   );
 }
 export function Home() {
