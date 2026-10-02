@@ -106,10 +106,17 @@ test('ordinary clicks expire and the modal fits narrow and intermediate viewport
   await trigger.click();
   const game = page.getByRole('dialog', { name: '点亮 I++' });
   await expect(game).toBeVisible();
+  await page.clock.resume();
   for (const [width, height] of [[320, 568], [393, 740], [768, 600], [900, 600], [1024, 600], [1440, 720]]) {
     await page.setViewportSize({ width, height });
-    expect(await game.evaluate(el => el.scrollWidth <= el.clientWidth)).toBe(true);
-    expect(await game.evaluate(el => el.scrollHeight <= el.clientHeight), `${width}×${height} viewport`).toBe(true);
+    await expect.poll(() => game.evaluate(el => {
+      const bounds = el.getBoundingClientRect();
+      return {
+        horizontal: el.scrollWidth <= el.clientWidth,
+        vertical: el.scrollHeight <= el.clientHeight,
+        inViewport: bounds.left >= 0 && bounds.right <= innerWidth && bounds.top >= 0 && bounds.bottom <= innerHeight
+      };
+    }), { message: `${width}×${height} viewport` }).toEqual({ horizontal: true, vertical: true, inViewport: true });
     const cells = await game.locator('.lo-cell').first().boundingBox();
     expect(cells!.width).toBeGreaterThanOrEqual(width <= 740 ? 44 : 28);
   }
